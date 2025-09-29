@@ -1,4 +1,4 @@
-name: PHP Composer
+name: PHP CI
 
 on:
   push:
@@ -6,34 +6,36 @@ on:
   pull_request:
     branches: [ "main" ]
 
-permissions:
-  contents: read
-
 jobs:
   build:
 
     runs-on: ubuntu-latest
 
     steps:
-    - uses: actions/checkout@v4
+      # Step 1: Checkout code dari repo
+      - name: Checkout code
+        uses: actions/checkout@v4
 
-    - name: Validate composer.json and composer.lock
-      run: composer validate --strict
+      # Step 2: Setup PHP versi 8.2 (bisa diganti sesuai kebutuhan)
+      - name: Setup PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.2'
+          coverage: none
+          tools: composer
 
-    - name: Cache Composer packages
-      id: composer-cache
-      uses: actions/cache@v3
-      with:
-        path: vendor
-        key: ${{ runner.os }}-php-${{ hashFiles('**/composer.lock') }}
-        restore-keys: |
-          ${{ runner.os }}-php-
+      # Step 3: Debug isi folder (opsional, bisa dihapus kalau udah lancar)
+      - name: List files
+        run: ls -R
 
-    - name: Install dependencies
-      run: composer install --prefer-dist --no-progress
+      # Step 4: Validasi composer.json dan composer.lock
+      - name: Validate composer.json and composer.lock
+        run: composer validate --strict
 
-    # Add a test script to composer.json, for instance: "test": "vendor/bin/phpunit"
-    # Docs: https://getcomposer.org/doc/articles/scripts.md
+      # Step 5: Install dependencies
+      - name: Install dependencies
+        run: composer install --no-progress --prefer-dist --optimize-autoloader
 
-    # - name: Run test suite
-    #   run: composer run-script test
+      # Step 6: Jalankan PHPUnit test
+      - name: Run PHPUnit tests
+        run: vendor/bin/phpunit --testdox
