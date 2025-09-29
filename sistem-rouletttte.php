@@ -5,21 +5,15 @@ header("Access-Control-Allow-Headers: Content-Type, Authorization");
 
 $token = "TjV2eWI3UXNmU2J2MmV0VHBYOHN4SnVNYVA5V0lieENqdEszaWlQTTBjdDlmT3lVaGVCcXJmSU5vRm1TN1RkcTBQOHZHNFJLQmduUitGWlVFMVo1SVZiRVU0cEF5Y2pnZFRxY2pjeGs2SXd6VXpIZlJxVmYyd2ViZzZvUTJVeGhXUlpHQ0NXTUhKSHBNL2dBZmQvTVJVbWtYVDBkWXdqRTVLbjZrZDlRTWR5SFFpUUZDOFNYWnR5Mm5Cb2xJTXpI"; 
 
-if(isset($_POST['hadiah']) && isset($_POST['email_user'])){
-    $hadiah = $_POST['hadiah']; // contoh: 5000
-    $email_penerima = $_POST['email_user']; 
-} else {
-    // default untuk testing
-    $hadiah = "0";
-    $email_penerima = "0";
-}
+$hadiah = $_GET['hadiah'] ?? null;
+$email = $_GET['email_penerima'] ?? null;
 
 $header = array(
     "Authorization: Bearer " . $token
 );
 
 $post_body = array(
-    "email_user" => $email_penerima,
+    "email_user" => $email,
     "tipe"       => "tambah",
     "jumlah"     => $hadiah,
     "notifikasi" => true
