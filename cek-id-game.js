@@ -30,3 +30,7 @@ async function checkNick() {
     console.error(error);
   }
 }
+
+function cekTes() {
+ console.log("berhasil!");
+}
