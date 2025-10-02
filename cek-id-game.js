@@ -1,4 +1,4 @@
-async function checkNickname() {
+async function checkNick() {
   const userId = document.getElementById("userId").value.trim();
   const nickElement = document.getElementById("nick");
 
